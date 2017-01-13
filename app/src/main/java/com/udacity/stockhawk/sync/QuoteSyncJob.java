@@ -8,7 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 
@@ -40,7 +44,7 @@ public final class QuoteSyncJob {
     private QuoteSyncJob() {
     }
 
-    static void getQuotes(Context context) {
+    static void getQuotes(final Context context) {
 
         Timber.d("Running sync job");
 
@@ -74,6 +78,24 @@ public final class QuoteSyncJob {
 
                 Stock stock = quotes.get(symbol);
                 StockQuote quote = stock.getQuote();
+                if(quote==null || quote.getPrice()==null)
+                {
+                    // Trying 3 times after exponential backoff
+                    Timber.e("Error!! Stock not found!!");
+
+                    // from -http://stackoverflow.com/questions/7378936/how-to-show-toast-message-from-background-thread
+                    Handler handler = new Handler(Looper.getMainLooper());
+
+                    handler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //Your UI code here
+                            Toast.makeText(context, R.string.error_no_symbol, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    return;
+                }
 
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
