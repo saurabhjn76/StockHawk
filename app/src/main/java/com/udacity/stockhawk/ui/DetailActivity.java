@@ -1,11 +1,13 @@
 package com.udacity.stockhawk.ui;
 
+import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -21,10 +23,12 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
+public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     LineChart lineChart;
     String symbol;
+    ArrayList<Entry> entries;
+    ArrayList<String> xVals;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,18 +44,40 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         Toast.makeText(getApplicationContext(),symbol,Toast.LENGTH_SHORT).show();
 
         // dataSet =new LineDataSet()
-        ArrayList<Entry> entries =new ArrayList<>();
+        entries=new ArrayList<>();
+
 
     }
 
     @Override
-    public void onLoaderReset(Loader loader) {
+    public void onLoaderReset(Loader<Cursor> loader) {
 
     }
 
     @Override
-    public void onLoadFinished(Loader loader, Object data) {
-        Timber.e(symbol,data.toString());
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        int count_label=0;
+       // Timber.e(data.);
+        if(data.moveToFirst()) {
+            do {
+                String date = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_HISTORY));
+                Float price = Float.valueOf(data.getString(data.getColumnIndex(Contract.Quote.COLUMN_PRICE)));
+                Log.e(date,price.toString());
+                entries.add(new Entry(count_label, price));
+                count_label++;
+
+            } while (data.moveToNext());
+            LineDataSet dataSet;
+            //if (lineChart.getData().getDataSetCount() > 0) {
+                dataSet = (LineDataSet) lineChart.getData().getDataSetByIndex(0);
+                dataSet.setValues(entries);
+                lineChart.getData().notifyDataChanged();
+                lineChart.notifyDataSetChanged();
+
+        }
+        else{
+
+        }
 
     }
 

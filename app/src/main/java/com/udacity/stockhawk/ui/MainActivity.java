@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -66,6 +68,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         onRefresh();
 
         QuoteSyncJob.initialize(this);
+                QuoteSyncJob.setHandler(new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.arg1==1){
+                    swipeRefreshLayout.setRefreshing(false);
+                    String symbol=(String)msg.obj;
+                    Toast.makeText(MainActivity.this, R.string.error_no_symbol, Toast.LENGTH_LONG).show();
+                            PrefUtils.removeStock(MainActivity.this,symbol);
+                           getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
+                }
+            }
+        });
+
         getSupportLoaderManager().initLoader(STOCK_LOADER, null, this);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
