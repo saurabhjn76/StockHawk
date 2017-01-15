@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.ui.MainActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public final class QuoteSyncJob {
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
 
             while (iterator.hasNext()) {
-                String symbol = iterator.next();
+                final String symbol = iterator.next();
 
 
                 Stock stock = quotes.get(symbol);
@@ -82,6 +83,7 @@ public final class QuoteSyncJob {
                 {
                     // Trying 3 times after exponential backoff
                     Timber.e("Error!! Stock not found!!");
+
 
                     // from -http://stackoverflow.com/questions/7378936/how-to-show-toast-message-from-background-thread
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -92,6 +94,7 @@ public final class QuoteSyncJob {
                         public void run() {
                             //Your UI code here
                             Toast.makeText(context, R.string.error_no_symbol, Toast.LENGTH_LONG).show();
+                            PrefUtils.removeStock(context,symbol);
                         }
                     });
                     return;
