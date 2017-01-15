@@ -99,9 +99,7 @@ public final class QuoteSyncJob {
 //                            Toast.makeText(context, R.string.error_no_symbol, Toast.LENGTH_LONG).show();
 //                            PrefUtils.removeStock(context,symbol);
 //                            context.getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
-
                     handler.sendMessage(ms);
-
 
                     return;
                 }

@@ -32,5 +32,10 @@
 
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
+    <!--Asscesibility-->
+    <string name="add_stocks">Add new stocks by clicking floating action button then writting the symbol</string>
+    <string name="add_symbol">Enter the stock symbol to add the stock</string>
+    <string name="change_display_mode">Click to change display mode to percentage or absolute</string>
+    <string name="stock_info">The stock %1$s .Has price %2$f and the change is %3$f.</string>
 
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
@@ -34,6 +35,7 @@
             android:id="@+id/change"
             style="@style/PercentChangeTextStyle"
             android:layout_width="wrap_content"
+            android:contentDescription="@string/change_display_mode"
             android:layout_height="wrap_content"
             android:background="@drawable/percent_change_pill_green"
             android:paddingLeft="3dp"

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
@@ -56,8 +57,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
     @Override
     public StockViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View item = LayoutInflater.from(context).inflate(R.layout.list_item_quote, parent, false);
-
+        View item = LayoutInflater.from(context).inflate(R.layout.list_item_quote, parent,false);
         return new StockViewHolder(item);
     }
 
@@ -65,9 +65,8 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
     public void onBindViewHolder(StockViewHolder holder, int position) {
 
         cursor.moveToPosition(position);
-
-
         holder.symbol.setText(cursor.getString(Contract.Quote.POSITION_SYMBOL));
+        holder.symbol.setContentDescription(String.format(context.getResources().getString(R.string.stock_info), cursor.getString(Contract.Quote.POSITION_SYMBOL),cursor.getFloat(Contract.Quote.POSITION_PRICE),cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE)));
         holder.price.setText(dollarFormat.format(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
 
 
@@ -122,6 +121,8 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+           // itemView.setContentDescription(String.format(context.getResources().getString(R.string.stock_info), cursor.getString(Contract.Quote.POSITION_SYMBOL),cursor.getFloat(Contract.Quote.POSITION_PRICE),cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE)));
+         //  Toast.makeText(context,String.format(context.getResources().getString(R.string.stock_info), cursor.getString(Contract.Quote.POSITION_SYMBOL),cursor.getFloat(Contract.Quote.POSITION_PRICE),cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE)),Toast.LENGTH_SHORT).show();
         }
 
         @Override
