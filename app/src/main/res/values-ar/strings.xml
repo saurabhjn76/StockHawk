@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Stock Hawk</string>
+    <string name="app_name">الأسهم هوك</string>
+    <string name="add_symbol">أدخل رمز السهم لإضافة الأسهم</string>
+    <string name="pref_stocks_initialized_key">تهيئة</string>
+    <string name="pref_display_mode_key">وضع العرض</string>
+    <string name="pref_display_mode_percentage_key">نسبة مئوية</string>
+    <string name="pref_display_mode_absolute_key">مطلق</string>
+    <string name="dialog_title">إضافة الأسهم</string>
+    <string name="dialog_cancel">إلغاء</string>
+    <string name="dialog_add">إضافة</string>
+    <string name="error_no_network">أي شبكة اتصال! سيتم تحميل المؤشر الأسهم عندما تتوفر الشبكة.</string>
+    <string name="error_no_stocks">وأضافت يوجد مخزون! اضغط على زر عمل العائمة لإضافة واحد.</string>
+    <string name="error_no_symbol">خطأ!! لا رمز السهم وجدت</string>
+    <string name="toast_stock_added_no_connectivity">رمز {0/} بإضافة. سيتم تحديث عندما شبكة المتاحة.</string>
+    <string name="toast_no_connectivity">سيتم تحديث عندما شبكة المتاحة.</string>
+    <string name="add_stocks">إضافة أسهم جديدة عن طريق النقر على زر عمل العائمة ثم ريتينغ الرمز</string>
+    <string name="change_display_mode">انقر لتغيير وضع العرض إلى النسبة المئوية أو مطلقة</string>
+    <string name="stock_info">السهم {0/}. سعر {1/} والتغيير هو {2/} .</string>
+    <string name="action_change_units">وضع الاظهار</string>
+    <string name="pref_display_mode_default">نسبة مئوية</string>
 </resources>
