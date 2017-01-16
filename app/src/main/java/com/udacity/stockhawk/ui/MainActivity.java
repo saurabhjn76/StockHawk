@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         StockAdapter.StockAdapterOnClickHandler {
 
     private static final int STOCK_LOADER = 0;
+    private boolean FIRST_LOAD =true;
     @BindView(R.id.recycler_view)
     RecyclerView stockRecyclerView;
     @BindView(R.id.swipe_refresh)
@@ -162,6 +163,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         if (data.getCount() != 0) {
             error.setVisibility(View.GONE);
+            if(!networkUp() && FIRST_LOAD){
+                Toast.makeText(getApplicationContext(), R.string.outdated,Toast.LENGTH_SHORT).show();
+                FIRST_LOAD=false;
+            }
         }
         adapter.setCursor(data);
     }
