@@ -14,7 +14,9 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailActivity extends AppCompatActivity  {
 
     LineChart lineChart;
     String symbol;
@@ -34,7 +36,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-       getSupportLoaderManager().initLoader(0,null,this);
         lineChart =(LineChart)findViewById(R.id.linechart);
         lineChart.setDrawGridBackground(false);
         lineChart.setViewPortOffsets(0,0,0,0);
@@ -43,49 +44,48 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         symbol = getIntent().getStringExtra("SYMBOL");
         Toast.makeText(getApplicationContext(),symbol,Toast.LENGTH_SHORT).show();
 
-        // dataSet =new LineDataSet()
+
+
         entries=new ArrayList<>();
+        ArrayList<String> xVals = new ArrayList<String>();
+        xVals.add("10");
+        xVals.add("20");
+        xVals.add("30");
+        xVals.add("30.5");
+        xVals.add("40");
+        setData(symbol);
+        Timber.e(entries.toString());
+        LineDataSet  dataSet = new LineDataSet(entries,"Vlue");
+        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        dataSets.add(dataSet); // add the datasets
+
+        // create a data object with the datasets
+        LineData data = new LineData(dataSets);
+
+        // set data
+        lineChart.setData(data);
+        lineChart.animate();
+
 
 
     }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        int count_label=0;
-       // Timber.e(data.);
-        if(data.moveToFirst()) {
-            do {
-                String date = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_HISTORY));
-                Float price = Float.valueOf(data.getString(data.getColumnIndex(Contract.Quote.COLUMN_PRICE)));
-                Log.e(date,price.toString());
-                entries.add(new Entry(count_label, price));
-                count_label++;
-
-            } while (data.moveToNext());
-            LineDataSet dataSet;
-            //if (lineChart.getData().getDataSetCount() > 0) {
-                dataSet = (LineDataSet) lineChart.getData().getDataSetByIndex(0);
-                dataSet.setValues(entries);
-                lineChart.getData().notifyDataChanged();
-                lineChart.notifyDataSetChanged();
-
+    void setData(String symbol){
+        Cursor data = getContentResolver().query(Contract.Quote.makeUriForStock(symbol), Contract.Quote.QUOTE_COLUMNS,null,null,null);
+        if(data.moveToFirst()){
+            do{
+                Timber.e(data.getString(data.getColumnIndex(Contract.Quote.COLUMN_HISTORY)));
+                String priceHistory = data.getString(data.getColumnIndex(Contract.Quote.COLUMN_HISTORY));
+                for(String datapoint : priceHistory.split("\n")){
+                    entries.add(new Entry(Long.valueOf(datapoint.split(",")[0].trim()),Float.valueOf(datapoint.split(",")[1].trim())));
+                }
+            }while (data.moveToNext());
         }
-        else{
+    }
 
-        }
+
 
     }
 
-    @Override
-    public Loader onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this,
-                Contract.Quote.makeUriForStock(symbol),
-                Contract.Quote.QUOTE_COLUMNS,
-                Contract.Quote.COLUMN_SYMBOL + "=?", new String[]{symbol}, Contract.Quote.COLUMN_SYMBOL);
-    }
-}
+
+

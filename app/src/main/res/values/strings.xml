@@ -37,6 +37,8 @@
     <string name="add_symbol">Enter the stock symbol to add the stock</string>
     <string name="change_display_mode">Click to change display mode to percentage or absolute</string>
     <string name="stock_info">The stock %1$s .Has price %2$f and the change is %3$f.</string>
+
+
     <string name="outdated" translatable="false">Stocks may be out of date, will refresh when connected</string>
 
 </resources>
