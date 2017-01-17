@@ -102,6 +102,7 @@ public class DetailActivity extends AppCompatActivity  {
 
         YAxis leftAxis = mChart.getAxisLeft();
         XAxis xAxis =mChart.getXAxis();
+            xAxis.setDrawLabels(true);
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
        // leftAxis.addLimitLine(upper_limit);
         //leftAxis.addLimitLine(lower_limit);
