@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -27,12 +28,12 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.EntryXComparator;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 import butterknife.ButterKnife;
@@ -45,7 +46,6 @@ public class DetailActivity extends AppCompatActivity  {
     String symbol;
     double maxYvalue=0;
     double minYvalue=0;
-    ArrayList<String> dateArrayList;
 
 
     @Override
@@ -71,12 +71,12 @@ public class DetailActivity extends AppCompatActivity  {
         // modify the legend ...
         // l.setPosition(LegendPosition.LEFT_OF_CHART);
         l.setForm(Legend.LegendForm.LINE);
-       // Description description =new Description();
-        //description.setText(symbol);
-        //description.setTextSize(12f);
+        Description description =new Description();
+        description.setText(symbol);
+        description.setTextSize(12f);
         // no description text
           //mChart.setDescription("Demo Line Chart");
-        mChart.setDescription(symbol);
+        mChart.setDescription(description);
         mChart.setNoDataText("No Data available");
 
         // enable touch gestures
@@ -154,17 +154,9 @@ public class DetailActivity extends AppCompatActivity  {
         ArrayList<Entry> yVals= setSymbolData(symbol);
 
 
-        Collections.sort(yVals, new Comparator<Entry>() {
-            @Override
-            public int compare(Entry o1, Entry o2) {
-                if(o1.getXIndex()<=o2.getXIndex())
-                    return 1;
-                else
-                    return -1;
-            }
-        });
+
         LineDataSet set1,set2;
-       // Collections.sort(yVals, new EntryXComparator());
+        Collections.sort(yVals, new EntryXComparator());
 
         // create a dataset and give it a type
         set1 = new LineDataSet(yVals, "Prices");
@@ -192,7 +184,7 @@ public class DetailActivity extends AppCompatActivity  {
 
 
         // create a data object with the datasets
-        LineData data = new LineData(xVals,dataSets);
+        LineData data = new LineData(dataSets);
 
         // set data
         mChart.setData(data);
@@ -203,7 +195,7 @@ public class DetailActivity extends AppCompatActivity  {
         minYvalue=99999999;
         maxYvalue=-99999999;
         int counter=1;
-        dateArrayList = new ArrayList<>();
+        ArrayList<Date> dateArrayList = new ArrayList<>();
         Cursor data = getContentResolver().query(Contract.Quote.makeUriForStock(symbol), Contract.Quote.QUOTE_COLUMNS,null,null,null);
         if(data.moveToFirst()){
             do{
@@ -216,8 +208,8 @@ public class DetailActivity extends AppCompatActivity  {
                     else if(Float.valueOf(datapoint.split(",")[1].trim())> maxYvalue){
                         maxYvalue=Float.valueOf(datapoint.split(",")[1].trim());
                     }
-                    entries.add(new Entry(Float.valueOf(datapoint.split(",")[1].trim()),(priceHistory.split("\n").length-counter++)));
-                    dateArrayList.add(new Date(Long.valueOf(datapoint.split(",")[0].trim())).toString());
+                    entries.add(new Entry(priceHistory.split("\n").length-counter++,Float.valueOf(datapoint.split(",")[1].trim())));
+                    dateArrayList.add(new Date(Long.valueOf(datapoint.split(",")[0].trim())));
                 }
             }while (data.moveToNext());
         }
