@@ -160,7 +160,7 @@ public class DetailActivity extends AppCompatActivity  {
         Collections.sort(yVals, new EntryXComparator());
 
         // create a dataset and give it a type
-        set1 = new LineDataSet(yVals, "Prices");
+        set1 = new LineDataSet(yVals, "Weeks");
        // set2 = new LineDataSet(xVals,"Dates");
 
         set1.setFillAlpha(110);

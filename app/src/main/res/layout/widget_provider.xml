@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/widget_provider_layout"
+    android:minHeight="100dip"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:minResizeHeight="100dip"
+    android:minResizeWidth="100dip"
+    android:minWidth="100dip"
+    android:previewImage="@drawable/ic_dollar"
+    android:resizeMode="vertical|horizontal"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="keyguard|home_screen" >
 
-</LinearLayout>
+</appwidget-provider>
