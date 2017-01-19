@@ -154,7 +154,6 @@ public class WidgetDataProvider implements RemoteViewsFactory,LoaderManager.Load
         // getSupportLoaderManager.initLoader(STOCK_LOADER, null, this);
         mContext.grantUriPermission ("com.udacity.stockhawk",Contract.Quote.makeBaseUri (),Intent.FLAG_GRANT_READ_URI_PERMISSION);
         cursor = mContext.getContentResolver().query(Contract.Quote.makeBaseUri (), Contract.Quote.QUOTE_COLUMNS, null, null, null);
-        cursor.moveToFirst ();
         if(cursor!=null){
             while (cursor.moveToNext ()){
                 symbols.add (cursor.getString(Contract.Quote.POSITION_SYMBOL));
