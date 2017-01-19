@@ -6,7 +6,7 @@ android:layout_margin="@dimen/widget_margin" >
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#bbDEDFDE"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -17,13 +17,6 @@ android:layout_margin="@dimen/widget_margin" >
         android:orientation="horizontal"
         android:paddingLeft="5dp"
         android:paddingRight="5dp" >
-
-        <ImageView
-            android:id="@+id/widgetImgLauncher"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_dollar" />
 
         <LinearLayout
             android:id="@+id/widgetTopBar"
@@ -42,14 +35,6 @@ android:layout_margin="@dimen/widget_margin" >
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#4B4B4D"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txvWidgetTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="dharmangsoni.blogspot.in"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#4B4B4D" />
         </LinearLayout>
     </LinearLayout>
 

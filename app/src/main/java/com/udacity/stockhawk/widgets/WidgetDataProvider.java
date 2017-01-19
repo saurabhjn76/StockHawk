@@ -39,6 +39,7 @@ public class WidgetDataProvider implements RemoteViewsFactory,LoaderManager.Load
    ArrayList<String> symbols = new ArrayList<>();
     ArrayList<Float> prices = new ArrayList<>();
     ArrayList<Float> changes = new ArrayList<>();
+    ArrayList<Float> percentageChange = new ArrayList<>();
 
     private Cursor cursor;
     private static final int STOCK_LOADER = 0;
@@ -93,27 +94,28 @@ public class WidgetDataProvider implements RemoteViewsFactory,LoaderManager.Load
         RemoteViews mView = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
         mView.setTextViewText(R.id.widget_symbol,symbols.get (position));
       //  Log.e("Remote",getSymbolAtPosition(position));
-       /* mView.setTextViewText(R.id.widget_price,dollarFormat.format(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
+        mView.setTextViewText(R.id.widget_price,dollarFormat.format(prices.get (position)));
 
-        float rawAbsoluteChange = cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
-        float percentageChange = cursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
+        float rawAbsoluteChange = changes.get (position);
+        float
+        percentagChange = percentageChange.get(position);
 
         if (rawAbsoluteChange > 0) {
-            mView.setInt(R.id.widget_change,"",R.drawable.percent_change_pill_green);
+            mView.setInt(R.id.widget_change,"setBackgroundResource",R.drawable.percent_change_pill_green);
         } else {
-            mView.setInt(R.id.widget_change,"",R.drawable.percent_change_pill_red);
+            mView.setInt(R.id.widget_change,"setBackgroundResource",R.drawable.percent_change_pill_red);
         }
 
 
         String change = dollarFormatWithPlus.format(rawAbsoluteChange);
-        String percentage = percentageFormat.format(percentageChange / 100);
+        String percentage = percentageFormat.format(percentagChange / 100);
         if (PrefUtils.getDisplayMode(mContext)
                 .equals(mContext.getString(R.string.pref_display_mode_absolute_key))) {
            mView.setTextViewText(R.id.widget_change,(change));
         } else {
             mView.setTextViewText(R.id.widget_change,(percentage));
         }
-        mView.setTextColor(R.id.widget_symbol, Color.BLACK);*/
+        mView.setTextColor(R.id.widget_symbol, Color.BLACK);
 
         final Intent fillInIntent = new Intent();
         fillInIntent.setAction(WidgetProvider.ACTION_TOAST);
@@ -145,14 +147,20 @@ public class WidgetDataProvider implements RemoteViewsFactory,LoaderManager.Load
         percentageFormat.setMaximumFractionDigits(2);
         percentageFormat.setMinimumFractionDigits(2);
         percentageFormat.setPositivePrefix("+");
+        symbols.clear ();
+        prices.clear ();
+        changes.clear ();
+        percentageChange.clear ();
         // getSupportLoaderManager.initLoader(STOCK_LOADER, null, this);
         mContext.grantUriPermission ("com.udacity.stockhawk",Contract.Quote.makeBaseUri (),Intent.FLAG_GRANT_READ_URI_PERMISSION);
         cursor = mContext.getContentResolver().query(Contract.Quote.makeBaseUri (), Contract.Quote.QUOTE_COLUMNS, null, null, null);
+        cursor.moveToFirst ();
         if(cursor!=null){
             while (cursor.moveToNext ()){
                 symbols.add (cursor.getString(Contract.Quote.POSITION_SYMBOL));
                 prices.add (cursor.getFloat(Contract.Quote.POSITION_PRICE));
                 changes.add (cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE));
+                percentageChange.add (cursor.getFloat (Contract.Quote.POSITION_PERCENTAGE_CHANGE));
             }
             cursor.close ();
         }
