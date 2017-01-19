@@ -151,7 +151,7 @@ public class WidgetDataProvider implements RemoteViewsFactory,LoaderManager.Load
         prices.clear ();
         changes.clear ();
         percentageChange.clear ();
-        // getSupportLoaderManager.initLoader(STOCK_LOADER, null, this);
+        // getSupportLoaderManager.initLoader(STOCK_LOADER, null, this);   Help needed can't resolve the method
         mContext.grantUriPermission ("com.udacity.stockhawk",Contract.Quote.makeBaseUri (),Intent.FLAG_GRANT_READ_URI_PERMISSION);
         cursor = mContext.getContentResolver().query(Contract.Quote.makeBaseUri (), Contract.Quote.QUOTE_COLUMNS, null, null, null);
         if(cursor!=null){
